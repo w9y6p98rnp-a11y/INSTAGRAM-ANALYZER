@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090d">
+<title>Instagram Analyzer</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#08090d;color:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{max-width:1100px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
+h1{margin:0;font-size:28px}.sub{color:#989cab;margin-top:5px}.badge{background:#17351f;color:#73e59a;border:1px solid #285b38;padding:8px 12px;border-radius:999px;font-size:13px}
+.hero{background:linear-gradient(135deg,#151822,#0e1016);border:1px solid #252938;border-radius:22px;padding:22px;margin-bottom:18px}
+button{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;background:#fff;color:#08090d}
+button.secondary{background:#1b1e28;color:#fff;border:1px solid #303443}
+input{display:none}.upload{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.card{background:#11131a;border:1px solid #252938;border-radius:18px;padding:18px}.num{font-size:28px;font-weight:800}.label{color:#9296a4;font-size:13px;margin-top:5px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.list{min-height:150px}.title{font-size:18px;font-weight:800;margin-bottom:12px}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #222532;color:#ddd}.empty{color:#858998;padding:20px 0}
+.note{font-size:13px;color:#9296a4;line-height:1.5;margin-top:14px}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div><h1>Instagram Analyzer</h1><div class="sub">Analizza i tuoi dati Instagram gratuitamente</div></div><div class="badge">100% gratuito</div></div>
+
+  <section class="hero">
+    <b>Importa i tuoi dati Instagram</b>
+    <div class="sub">L'app elabora i file direttamente nel browser: non serve inserire la password.</div>
+    <div class="upload">
+      <label><button onclick="document.getElementById('file').click()">📂 Importa file Instagram</button></label>
+      <input id="file" type="file" multiple accept=".json,.html,.zip">
+      <button class="secondary" onclick="demo()">▶ Prova con dati demo</button>
+    </div>
+    <div class="note">Per la versione reale useremo l'esportazione ufficiale dei dati di Instagram. Le funzioni “chi ti ha bloccato” e “chi visita spesso il profilo” non sono disponibili in modo affidabile tramite i dati ufficiali, quindi non verranno inventate.</div>
+  </section>
+
+  <div class="stats">
+    <div class="card"><div class="num" id="followers">—</div><div class="label">Follower</div></div>
+    <div class="card"><div class="num" id="following">—</div><div class="label">Seguiti</div></div>
+    <div class="card"><div class="num" id="notFollowing">—</div><div class="label">Segui ma non ti seguono</div></div>
+    <div class="card"><div class="num" id="notFollowed">—</div><div class="label">Ti seguono ma non li segui</div></div>
+  </div>
+
+  <div class="grid">
+    <section class="card list"><div class="title">➡️ Segui ma non ti seguono</div><div id="followingOnly" class="empty">Nessun dato</div></section>
+    <section class="card list"><div class="title">⬅️ Ti seguono ma non li segui</div><div id="followersOnly" class="empty">Nessun dato</div></section>
+    <section class="card list"><div class="title">💔 Follower persi</div><div id="lost" class="empty">Per rilevarli serve uno storico precedente.</div></section>
+    <section class="card list"><div class="title">📈 Nuovi follower</div><div id="new" class="empty">Per rilevarli serve uno storico precedente.</div></section>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function render(followers,following){
+  followers=[...new Set(followers.map(x=>String(x).trim().toLowerCase()).filter(Boolean))];
+  following=[...new Set(following.map(x=>String(x).trim().toLowerCase()).filter(Boolean))];
+  const F=new Set(followers), G=new Set(following);
+  const a=following.filter(x=>!F.has(x)), b=followers.filter(x=>!G.has(x));
+  $('followers').textContent=followers.length;$('following').textContent=following.length;
+  $('notFollowing').textContent=a.length;$('notFollowed').textContent=b.length;
+  list('followingOnly',a);list('followersOnly',b);
+}
+function list(id,arr){
+  $(id).innerHTML=arr.length?arr.slice(0,100).map(x=>`<div class="row"><span>@${esc(x)}</span></div>`).join(''):'<div class="empty">Nessun dato</div>';
+}
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function demo(){
+  render(['anna','marco','giulia','luca','sofia','francesca'],['anna','marco','luca','davide','elena','sofia','paolo']);
+}
+$('file').addEventListener('change',async e=>{
+  const files=[...e.target.files];
+  alert('File ricevuti. Nella prossima versione collegheremo automaticamente i JSON/HTML dell’esportazione Instagram e creeremo lo storico dei cambiamenti.');
+});
+</script>
+</body>
+</html>
