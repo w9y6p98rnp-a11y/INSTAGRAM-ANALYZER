@@ -1,183 +1,128 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#090a0f">
-<title>Instagram Analyzer</title>
-<style>
-:root{--bg:#090a0f;--panel:#11131b;--panel2:#171a24;--line:#282c38;--text:#f7f7fa;--muted:#979cab;--accent:#ff375f;--green:#42d392}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.app{max-width:1100px;margin:auto;padding:18px 16px 45px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.brand{display:flex;align-items:center;gap:11px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#ff375f,#a855f7);display:grid;place-items:center;font-size:23px}.brand h1{font-size:22px;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:13px}
-.pill{border:1px solid #275a3f;color:#79e4a3;background:#102318;padding:8px 11px;border-radius:999px;font-size:12px;font-weight:700}
-.hero{background:linear-gradient(135deg,#151822,#0e1016);border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:15px}.hero h2{margin:0 0 6px;font-size:19px}.hero p{color:var(--muted);line-height:1.5;margin:0}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}button,label.btn{border:0;border-radius:12px;padding:12px 15px;font-weight:750;cursor:pointer;background:#fff;color:#090a0f;display:inline-flex;align-items:center;gap:8px}button.secondary,label.btn.secondary{background:#1b1e28;color:#fff;border:1px solid #303442}button.danger{background:#35151e;color:#ff8ca3;border:1px solid #632838}
-input[type=file]{display:none}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px}.stat .n{font-size:27px;font-weight:850}.stat .l{font-size:12px;color:var(--muted);margin-top:4px}
-.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:12px}.tab{white-space:nowrap;padding:10px 13px;border-radius:11px;background:var(--panel);border:1px solid var(--line);color:#aeb2bf;cursor:pointer}.tab.active{background:#fff;color:#090a0f}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px}.card h3{font-size:16px;margin:0 0 10px}.list{max-height:390px;overflow:auto}.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #232632}.row:last-child{border-bottom:0}.user{font-weight:650}.small{font-size:12px;color:var(--muted)}.empty{color:var(--muted);padding:18px 0;line-height:1.5}
-.search{width:100%;background:#0d0f15;color:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin-bottom:10px;outline:none}
-.notice{margin-top:12px;color:#9ca1ae;font-size:12px;line-height:1.5}.hidden{display:none!important}
-@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.top{align-items:flex-start}.pill{font-size:11px}.hero{padding:17px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b0f">
+  <title>Instagram Analyzer</title>
+  <style>
+    :root{--bg:#0b0b0f;--card:#15151b;--muted:#9a9aa5;--text:#f7f7fa;--accent:#ff2d75;--line:#282832}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#21101c 0,#0b0b0f 42%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif}
+    .wrap{max-width:760px;margin:auto;padding:28px 18px 50px}.hero{text-align:center;padding:35px 10px 22px}.logo{font-size:52px}.hero h1{font-size:32px;margin:10px 0 8px}.hero p{color:var(--muted);line-height:1.5;margin:0 auto;max-width:560px}
+    .btn{display:block;width:100%;border:0;border-radius:16px;padding:17px 18px;font-size:17px;font-weight:750;color:#fff;background:linear-gradient(135deg,#ff2d75,#8b5cf6);box-shadow:0 10px 30px #ff2d7530;margin:22px 0;cursor:pointer}
+    .btn.secondary{background:#1d1d25;box-shadow:none;border:1px solid var(--line);font-size:15px}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:#15151bdd;border:1px solid var(--line);border-radius:18px;padding:18px}.wide{grid-column:1/-1}.label{color:var(--muted);font-size:13px}.value{font-size:25px;font-weight:750;margin-top:5px}
+    .status{padding:13px 15px;border-radius:14px;background:#121219;border:1px solid var(--line);color:#c9c9d2;font-size:14px;line-height:1.45}.ok{border-color:#2d8f5b;color:#a8e7c5}.warn{border-color:#8c6a27;color:#f0d28b}
+    .hidden{display:none}.profile{display:flex;align-items:center;gap:14px}.avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;background:#252530}.username{font-size:20px;font-weight:750}.small{font-size:13px;color:var(--muted)}
+    ul{padding-left:20px;color:#c9c9d2;line-height:1.6}.footer{color:#777783;font-size:12px;text-align:center;margin-top:30px}
+    code{background:#20202a;padding:2px 5px;border-radius:5px}
+  </style>
 </head>
 <body>
-<div class="app">
-<header class="top">
-  <div class="brand"><div class="logo">◎</div><div><h1>Instagram Analyzer</h1><p>Il tuo Instagram, analizzato localmente</p></div></div>
-  <div class="pill">GRATUITA</div>
-</header>
+<div class="wrap">
+  <section id="landing">
+    <div class="hero">
+      <div class="logo">📸</div>
+      <h1>Instagram Analyzer</h1>
+      <p>Collega il tuo Instagram e ottieni automaticamente i dati che l'API ufficiale di Instagram permette di leggere.</p>
+    </div>
+    <button class="btn" id="connect">COLLEGA INSTAGRAM</button>
+    <div class="status warn">
+      <b>Importante:</b> questa versione usa il login ufficiale Instagram. Non inserire mai la password Instagram nell'app.
+      Per la connessione API l'account deve essere professionale (Creator o Business).
+    </div>
+  </section>
 
-<section class="hero">
-  <h2>Importa il tuo archivio Instagram</h2>
-  <p>Scarica i tuoi dati da Instagram e importa qui i file di follower e seguiti. L'elaborazione avviene nel browser: nessuna password Instagram viene richiesta.</p>
-  <div class="actions">
-    <label class="btn"><span>📂</span> Importa dati <input id="files" type="file" multiple accept=".html,.json,.txt"></label>
-    <button class="secondary" id="demo">▶ Prova demo</button>
-    <button class="secondary" id="export">⬇ Esporta analisi</button>
-    <button class="danger" id="clear">Cancella dati</button>
-  </div>
-  <div class="notice">Per confrontare chi ti ha tolto il follow o chi hai smesso di seguire, l'app salva uno snapshot locale. Nessun dato viene inviato a un server.</div>
-</section>
+  <section id="dashboard" class="hidden">
+    <div class="profile card">
+      <img id="avatar" class="avatar" alt="">
+      <div><div id="username" class="username">—</div><div id="accountType" class="small">Account collegato</div></div>
+    </div>
 
-<section class="stats">
- <div class="stat"><div class="n" id="followers">0</div><div class="l">Follower</div></div>
- <div class="stat"><div class="n" id="following">0</div><div class="l">Seguiti</div></div>
- <div class="stat"><div class="n" id="notBack">0</div><div class="l">Non ricambiano</div></div>
- <div class="stat"><div class="n" id="notFollowing">0</div><div class="l">Ti seguono, non segui</div></div>
-</section>
+    <div class="grid" style="margin-top:12px">
+      <div class="card"><div class="label">Follower</div><div class="value" id="followers">—</div></div>
+      <div class="card"><div class="label">Seguiti</div><div class="value" id="following">—</div></div>
+      <div class="card"><div class="label">Post / media</div><div class="value" id="media">—</div></div>
+      <div class="card"><div class="label">Stato</div><div class="value">ONLINE</div></div>
+      <div class="card wide">
+        <div class="label">Cosa può fare questa versione</div>
+        <ul>
+          <li>Login OAuth ufficiale Instagram</li>
+          <li>Lettura automatica del profilo collegato</li>
+          <li>Dashboard pronta per dati e insight disponibili</li>
+          <li>Nessuna password Instagram salvata</li>
+        </ul>
+      </div>
+      <div class="card wide">
+        <div class="label">Cosa Instagram non espone all'app tramite API ufficiale</div>
+        <ul>
+          <li>Lista affidabile di chi visita il tuo profilo</li>
+          <li>Lista affidabile di chi ti ha bloccato</li>
+          <li>Per gli account personali, le API ufficiali non permettono il vecchio accesso Basic Display</li>
+          <li>Follower/following completi non sono promessi dall'attuale API per questo caso d'uso</li>
+        </ul>
+      </div>
+    </div>
 
-<div class="tabs">
- <button class="tab active" data-tab="relations">Relazioni</button>
- <button class="tab" data-tab="changes">Cambiamenti</button>
- <button class="tab" data-tab="history">Storico</button>
- <button class="tab" data-tab="info">Limiti</button>
+    <button class="btn secondary" id="logout">DISCONNETTI</button>
+    <div id="dashStatus" class="status"></div>
+  </section>
+
+  <div class="footer">Instagram Analyzer v3 · OAuth ufficiale · nessuna password salvata</div>
 </div>
-
-<section id="relations" class="tabcontent">
- <input class="search" id="search" placeholder="Cerca un username…">
- <div class="grid">
-  <div class="card"><h3>➡️ Segui ma non ti seguono</h3><div class="list" id="notBackList"></div></div>
-  <div class="card"><h3>⬅️ Ti seguono ma non li segui</h3><div class="list" id="notFollowingList"></div></div>
- </div>
-</section>
-
-<section id="changes" class="tabcontent hidden">
- <div class="grid">
-  <div class="card"><h3>💔 Ti hanno tolto il follow</h3><div class="list" id="lostList"></div></div>
-  <div class="card"><h3>➕ Nuovi follower</h3><div class="list" id="newFollowersList"></div></div>
-  <div class="card"><h3>↩️ Hai smesso di seguire</h3><div class="list" id="unfollowedList"></div></div>
-  <div class="card"><h3>👤 Hai iniziato a seguire</h3><div class="list" id="newFollowingList"></div></div>
- </div>
-</section>
-
-<section id="history" class="tabcontent hidden">
- <div class="card"><h3>📅 Snapshot salvati su questo dispositivo</h3><div id="historyList" class="list"></div></div>
-</section>
-
-<section id="info" class="tabcontent hidden">
- <div class="card">
- <h3>Cosa può fare davvero questa app</h3>
- <div class="empty">
- <b>Disponibile:</b> confronto follower/seguiti, persone che non ricambiano, nuovi follower e unfollow effettuati, con storico locale.<br><br>
- <b>Non disponibile in modo certo:</b> elenco delle persone che visitano il tuo profilo e lista certa di chi ti ha bloccato. Instagram non espone normalmente questi dati tramite le API ufficiali.<br><br>
- <b>Sicurezza:</b> non inserire qui la password Instagram. L'app è progettata per lavorare con l'esportazione ufficiale dei dati.
- </div>
- </div>
-</section>
-</div>
-
+<script src="config.js"></script>
 <script>
-const state={followers:new Set(),following:new Set(),previous:null,history:[]};
-const $=id=>document.getElementById(id);
-const norm=s=>String(s||'').trim().replace(/^@/,'').toLowerCase();
-function unique(a){return [...new Set(a.map(norm).filter(x=>x&&x.length>0))].sort()}
-function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function arr(set){return [...set]}
-function setText(id,n){$(id).textContent=n.toLocaleString('it-IT')}
-function list(id,items){
- const el=$(id); if(!items.length){el.innerHTML='<div class="empty">Nessun risultato.</div>';return}
- el.innerHTML=items.map(x=>`<div class="row"><span class="user">@${esc(x)}</span></div>`).join('')
+const cfg = window.INSTAGRAM_ANALYZER_CONFIG || {};
+const landing = document.getElementById('landing');
+const dashboard = document.getElementById('dashboard');
+const statusBox = document.getElementById('dashStatus');
+
+function showDashboard(data){
+  landing.classList.add('hidden'); dashboard.classList.remove('hidden');
+  document.getElementById('username').textContent = data.username || 'Account Instagram';
+  document.getElementById('followers').textContent = data.followers_count ?? '—';
+  document.getElementById('following').textContent = data.follows_count ?? '—';
+  document.getElementById('media').textContent = data.media_count ?? '—';
+  if(data.profile_picture_url) document.getElementById('avatar').src = data.profile_picture_url;
+  statusBox.className='status ok';
+  statusBox.textContent='Account collegato correttamente tramite OAuth.';
 }
-function loadHistory(){try{state.history=JSON.parse(localStorage.getItem('ig_analyzer_history')||'[]')}catch{state.history=[]}}
-function saveHistory(){localStorage.setItem('ig_analyzer_history',JSON.stringify(state.history))}
-function snapshot(){
- return {date:new Date().toLocaleString('it-IT'),followers:arr(state.followers),following:arr(state.following)}
-}
-function render(){
- const F=state.followers,G=state.following;
- const notBack=arr(G).filter(x=>!F.has(x)), notFollowing=arr(F).filter(x=>!G.has(x));
- setText('followers',F.size);setText('following',G.size);setText('notBack',notBack.length);setText('notFollowing',notFollowing.length);
- list('notBackList',notBack);list('notFollowingList',notFollowing);
- const prev=state.previous;
- if(prev){
-  const PF=new Set(prev.followers||[]),PG=new Set(prev.following||[]);
-  list('lostList',arr(PF).filter(x=>!F.has(x)));
-  list('newFollowersList',arr(F).filter(x=>!PF.has(x)));
-  list('unfollowedList',arr(PG).filter(x=>!G.has(x)));
-  list('newFollowingList',arr(G).filter(x=>!PG.has(x)));
- }else{
-  ['lostList','newFollowersList','unfollowedList','newFollowingList'].forEach(id=>$(id).innerHTML='<div class="empty">Importa un secondo snapshot in un momento successivo per vedere i cambiamenti.</div>');
- }
- renderHistory()
-}
-function renderHistory(){
- const el=$('historyList');
- if(!state.history.length){el.innerHTML='<div class="empty">Nessuno snapshot salvato.</div>';return}
- el.innerHTML=state.history.slice().reverse().map((s,i)=>`<div class="row"><div><div class="user">${esc(s.date)}</div><div class="small">${s.followers.length} follower · ${s.following.length} seguiti</div></div></div>`).join('')
-}
-function setData(followers,following){
- state.previous=state.followers.size||state.following.size?{followers:arr(state.followers),following:arr(state.following)}:null;
- state.followers=new Set(unique(followers));state.following=new Set(unique(following));
- const s=snapshot();state.history.push(s);state.history=state.history.slice(-20);saveHistory();render();
-}
-function demo(){
- setData(['anna','marco','giulia','luca','sofia','francesca','paolo'],['anna','marco','luca','davide','elena','sofia','irene']);
- setTimeout(()=>alert('Demo caricata. Puoi modificare i dati importando il tuo archivio Instagram.'),20)
-}
-function extractNames(text){
- const out=[];
- // username da link Instagram
- for(const m of text.matchAll(/instagram\\.com\\/([A-Za-z0-9._]+)/gi)) out.push(m[1]);
- // JSON/HTML username fields and hrefs
- for(const m of text.matchAll(/"?(?:value|username|href)"?\\s*[:=]\\s*["']([^"'<>\\s]+)["']/gi)) {
-   let v=m[1]; if(v.includes('instagram.com/')) v=v.split('instagram.com/')[1].split(/[/?#]/)[0]; out.push(v);
- }
- return out;
-}
-async function parseFiles(files){
- let followers=[],following=[];
- for(const file of files){
-  const text=await file.text();
-  const n=extractNames(text);
-  const low=file.name.toLowerCase();
-  if(low.includes('follower')) followers.push(...n); else if(low.includes('following')) following.push(...n);
- }
- if(!followers.length && !following.length){
-   alert('Non ho trovato automaticamente gli username. Assicurati di aver selezionato i file follower/following dell’esportazione Instagram.');
-   return;
- }
- setData(followers,following);
-}
-$('files').addEventListener('change',e=>parseFiles([...e.target.files]));
-$('demo').onclick=demo;
-$('clear').onclick=()=>{if(confirm('Cancellare tutti gli snapshot salvati su questo dispositivo?')){localStorage.removeItem('ig_analyzer_history');state.followers.clear();state.following.clear();state.previous=null;state.history=[];render()}};
-$('search').addEventListener('input',e=>{
- const q=norm(e.target.value);
- const a=arr(state.following).filter(x=>x.includes(q)&&!state.followers.has(x));
- const b=arr(state.followers).filter(x=>x.includes(q)&&!state.following.has(x));
- list('notBackList',a);list('notFollowingList',b);
-});
-$('export').onclick=()=>{
- const data={createdAt:new Date().toISOString(),followers:arr(state.followers),following:arr(state.following),history:state.history};
- const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='instagram-analyzer-export.json';a.click();URL.revokeObjectURL(a.href);
+
+document.getElementById('connect').onclick = () => {
+  if(!cfg.backendUrl){
+    alert('Configura prima backendUrl in config.js');
+    return;
+  }
+  window.location.href = cfg.backendUrl.replace(/\/$/,'') + '/auth/instagram';
 };
-document.querySelectorAll('.tab').forEach(btn=>btn.onclick=()=>{
- document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
- document.querySelectorAll('.tabcontent').forEach(x=>x.classList.add('hidden'));$(btn.dataset.tab).classList.remove('hidden');
-});
-loadHistory();render();
+
+document.getElementById('logout').onclick = () => {
+  localStorage.removeItem('ig_profile');
+  dashboard.classList.add('hidden'); landing.classList.remove('hidden');
+};
+
+try{
+  const saved = JSON.parse(localStorage.getItem('ig_profile') || 'null');
+  if(saved) showDashboard(saved);
+}catch(e){}
+
+const params = new URLSearchParams(location.search);
+if(params.get('connected') === '1'){
+  const profile = {
+    username: params.get('username') || 'Account Instagram',
+    followers_count: params.get('followers') || null,
+    follows_count: params.get('following') || null,
+    media_count: params.get('media') || null,
+    profile_picture_url: params.get('avatar') || null
+  };
+  localStorage.setItem('ig_profile', JSON.stringify(profile));
+  history.replaceState({},'',location.pathname);
+  showDashboard(profile);
+}
+if(params.get('error')){
+  statusBox.className='status warn';
+  statusBox.textContent='Connessione non completata: ' + params.get('error');
+}
 </script>
 </body>
 </html>

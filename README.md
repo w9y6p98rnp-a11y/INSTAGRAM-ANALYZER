@@ -1,22 +1,47 @@
-# Instagram Analyzer — versione gratuita v2
+# Instagram Analyzer v3 — Automatico
 
-App statica compatibile con GitHub Pages.
+Questa versione prepara l'architettura corretta per un collegamento Instagram automatico tramite OAuth ufficiale.
 
-## Funzioni
-- Importazione locale dei file follower/following dell'esportazione Instagram
-- Confronto follower/seguiti
-- Chi segui ma non ti segue
-- Chi ti segue ma non segui
-- Snapshot locali
-- Nuovi follower / follower persi tra snapshot
-- Chi hai smesso di seguire / chi hai iniziato a seguire
-- Ricerca username
-- Esportazione JSON
-- Nessuna password Instagram
-- Nessun server obbligatorio
+## Cosa contiene
 
-## Limiti
-Le API ufficiali di Instagram non forniscono una lista completa dei follower/seguiti per l'uso previsto e non forniscono una lista delle persone che visitano il profilo. La funzione blocchi non viene presentata come certa.
+- `index.html` — interfaccia GitHub Pages
+- `config.js` — URL del backend
+- `worker.js` — backend Cloudflare Worker per OAuth
+- `README.md` — istruzioni
 
-## GitHub Pages
-Sostituisci `index.html` nel repository con quello di questa cartella, commit/push su `main`, poi GitHub Pages aggiornerà il sito.
+## Importante
+
+Instagram non deve essere collegato inserendo la password dentro questa app.
+
+La versione corrente dell'API Instagram con Instagram Login è destinata agli account professionali (Creator/Business). Il flusso usa `https://www.instagram.com/oauth/authorize` e il backend conserva il client secret fuori dal repository pubblico.
+
+Il vecchio Instagram Basic Display API per account personali non è una soluzione disponibile.
+
+Inoltre, l'API ufficiale non fornisce una lista affidabile di:
+- visitatori del profilo
+- persone che ti hanno bloccato
+
+E non bisogna inventare questi dati.
+
+## Configurazione
+
+1. Crea/configura l'app nel Meta Developer Dashboard.
+2. Abilita Instagram API con Instagram Login.
+3. Inserisci l'URL callback del Worker:
+   `https://TUO-WORKER.workers.dev/auth/callback`
+4. Nel Cloudflare Worker crea i secret:
+   - `IG_CLIENT_ID`
+   - `IG_CLIENT_SECRET`
+5. Imposta la variabile `FRONTEND_URL` con:
+   `https://w9y6p98rnp-a11y.github.io/INSTAGRAM-ANALYZER/`
+6. Pubblica `worker.js`.
+7. Modifica `config.js` e sostituisci `INSERISCI_QUI_URL_BACKEND` con l'URL del Worker.
+8. Carica `index.html` e `config.js` nel repository GitHub Pages.
+
+## Sicurezza
+
+Non mettere mai `IG_CLIENT_SECRET` in `index.html`, `config.js` o in un repository pubblico.
+
+## Stato
+
+Questa v3 realizza il collegamento OAuth e la lettura del profilo professionale. La parte "chi segui/non ti segue" può essere aggiunta solo dove l'API ufficiale espone realmente quei dati; non usa scraping o password.
